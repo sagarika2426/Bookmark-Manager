@@ -1,30 +1,17 @@
-import Link from "next/link";
 import { bookmarks } from "@/data/bookmarks";
+import Link from "next/link";
 
-export const metadata = {
-  title: "All Bookmarks",
-};
+export default function categoryPage({params}: {params: {category: string}}) {
 
-const categories = Array.from(new Set(bookmarks.map((b) => b.category)));
-export default function Home() {
-  return (
-    <div className="p-6 max-w-5xl mx-auto text-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-white">📚 All Bookmarks</h1>
-      <div className="flex flex-wrap gap-3 mb-8">
-  {categories.map((category) => (
-    <Link
-      key={category}
-      href={`/categories/${category}`}
-      className="px-4 py-2 rounded-full bg-gray-800 text-gray-300 text-sm font-medium tracking-wide hover:bg-blue-600 hover:text-white transition-all duration-200 shadow-sm border border-gray-600 hover:border-blue-500"
-    >
-      #{category}
-    </Link>
-  ))}
-</div>
-
+    const filtered = bookmarks.filter((b) => b.category === params.category);
+    return(
+      <div className="p-6 max-w-5xl mx-auto text-gray-100">
+      <h1 className="text-2xl font-bold mb-6 text-white capitalize">
+        📁 {params.category} Bookmarks
+      </h1>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {bookmarks.map((bookmark) => (
+        {filtered.map((bookmark) => (
           <Link
             key={bookmark.slug}
             href={`/bookmarks/${bookmark.category}/${bookmark.slug}`}
@@ -47,5 +34,5 @@ export default function Home() {
         ))}
       </div>
     </div>
-  );
+    )
 }
