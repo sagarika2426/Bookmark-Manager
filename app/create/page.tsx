@@ -84,8 +84,6 @@ export default function CreateBookmarkModal({ isOpen, setIsOpen }) {
       customCategory: ''
     });
   };
-
-  // Don't render anything if modal is not open
   if (!isOpen) return null;
 
   return (
