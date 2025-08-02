@@ -1,39 +1,64 @@
-import { notFound } from "next/navigation";
+"use client";
 import Link from "next/link";
-import { bookmarks } from "@/data/bookmarks";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+interface Bookmark {
+  slug: string;
+  category: string;
+  title: string;
+  description: string;
+  url: string;
+}
 
 
-export const generateMetadata = ({
-  params,
-}: {
-  params: { slug: string; category: string };
-}) => {
-  const bookmark = bookmarks.find(
-    (b) => b.slug === params.slug && b.category === params.category
-  );
-  return {
-    title: bookmark?.title || "Bookmark Not Found",
-    description: bookmark?.description || "Bookmark not found in our collection",
+export default function BookmarkPage() {
+
+
+  
+ const params = useParams();
+  const slug = params?.slug as string;
+  const category = params?.category as string;
+
+  const [bookmark, setBookmark] = useState<Bookmark | null>(null);
+  const [relatedBookmarks, setRelatedBookmarks] = useState<Bookmark[]>([]);
+
+  useEffect(() => {
+    const fetchBookmark = async () => {
+      if (!slug) return;
+      try {
+        const res = await fetch(`/api/bookmark/${slug}`);
+        const data = await res.json();
+        if (data.success) {
+          setBookmark(data.data);
+        } else {
+          console.error(data.error);
+        }
+      } catch (err) {
+        console.error("Fetch failed", err);
+      }
+    };
+
+    fetchBookmark();
+  }, [slug]);
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/bookmark/${slug}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Bookmark deleted!");
+      } else {
+        alert(data.error || "Failed to delete");
+      }
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
   };
-};
 
-export default function BookmarkPage({
-  params,
-}: {
-  params: { slug: string; category: string };
-}) {
-  const bookmark = bookmarks.find(
-    (b) => b.slug === params.slug && b.category === params.category
-  );
-
-  if (!bookmark) return notFound();
-
-  // Get related bookmarks from the same category
-  const relatedBookmarks = bookmarks
-    .filter(b => b.category === bookmark.category && b.slug !== bookmark.slug)
-    .slice(0, 3);
-
-
+  if (!bookmark) return <div>Loading...</div>;
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header with breadcrumb */}
@@ -57,12 +82,7 @@ export default function BookmarkPage({
             <span className="text-gray-300 font-medium">{bookmark.title}</span>
           </nav>
           
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-              <span className="text-xl">🔖</span>
-            </div>
-          
-          </div>
+
         </div>
       </div>
 
@@ -155,8 +175,10 @@ export default function BookmarkPage({
                   <span className="text-sm">📤</span>
                   <span className="text-sm font-medium">Share</span>
                 </button>
-                <button className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200">
-                  <span className="text-sm">🗑️</span>
+<button
+  onClick={() => handleDelete()}
+  className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-red-700/50 hover:bg-red-700 text-red-300 hover:text-white transition-all duration-200"
+>                  <span className="text-sm">🗑️</span>
                   <span className="text-sm font-medium">Delete</span>
                 </button>
               </div>
@@ -176,9 +198,7 @@ export default function BookmarkPage({
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-white font-medium">#{bookmark.category}</p>
-                      <p className="text-gray-400 text-xs">
-                        {bookmarks.filter(b => b.category === bookmark.category).length} bookmarks
-                      </p>
+              
                     </div>
                     <svg className="w-4 h-4 text-gray-400 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

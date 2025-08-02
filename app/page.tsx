@@ -1,16 +1,48 @@
+"use client";
 import Link from "next/link";
-import { bookmarks } from "@/data/bookmarks";
+// import { bookmarks } from "@/data/bookmarks";
+import { useEffect, useState } from "react";
+import CreateBookmarkModal from "./create/page";
 
-export const metadata = {
-  title: "BookmarkHub - Your Digital Library",
-  description: "Organize and access your favorite bookmarks with ease",
-};
+// export const metadata = {
+//   title: "BookmarkHub - Your Digital Library",
+//   description: "Organize and access your favorite bookmarks with ease",
+// };
 
-const categories = Array.from(new Set(bookmarks.map((b) => b.category)));
 
 export default function Home() {
+    const [bookmarks, setBookmarks] = useState([]);
+      const [loading, setLoading] = useState(true);
+          const [isOpen, setIsOpen] = useState(false);
+            const [categories, setCategories] = useState([]);
+
+
+
+
+  useEffect(() => {
+    async function fetchBookmarks() {
+      try {
+        const res = await fetch("/api/allbookmarks");
+        const data = await res.json();
+        if (data.success) {
+          setBookmarks(data.data);
+          const uniqueCategories = Array.from(
+            new Set(data.data.map((b) => b.category))
+          );
+          setCategories(uniqueCategories);
+        }
+      } catch (err) {
+        console.error("Failed to fetch bookmarks", err);
+      }
+    }
+
+    fetchBookmarks();
+  }, []);
+
   const bookmarkCount = bookmarks.length;
   
+  const openModal = () => setIsOpen(true);
+
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Header Section */}
@@ -65,6 +97,14 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <div className="text-center mb-8">
+  <button  onClick={openModal} 
+     // make sure this function opens your bookmark creation modal
+    className="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-all duration-200 shadow-lg hover:shadow-blue-500/30"
+  >
+    <span className="text-lg">➕</span> Add New Bookmark
+  </button>
+</div>
       </div>
 
       {/* Main Content */}
@@ -153,6 +193,7 @@ export default function Home() {
           </div>
         </div> */}
       </div>
+       <CreateBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </div>
   );
 }
