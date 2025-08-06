@@ -1,46 +1,9 @@
 import { bookmarks } from "@/data/bookmarks";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
-export const generateMetadata = ({ params }: { params: { category: string } }) => {
-  const filtered = bookmarks.filter((b) => b.category === params.category);
-  
-  if (filtered.length === 0) {
-    return {
-      title: "Category Not Found",
-      description: "The requested category could not be found.",
-    };
-  }
-
-  return {
-    title: `${params.category} Bookmarks - BookmarkHub`,
-    description: `Explore ${filtered.length} bookmarks in the ${params.category} category`,
-  };
-};
-
-export default function CategoryPage({ params }: { params: { category: string } }) {
-  const filtered = bookmarks.filter((b) => b.category === params.category);
-  
-  if (filtered.length === 0) {
-    return notFound();
-  }
-
-  // Get all categories for the sidebar
-  const allCategories = Array.from(new Set(bookmarks.map((b) => b.category)))
-    .map(cat => ({
-      name: cat,
-      count: bookmarks.filter(b => b.category === cat).length,
-      isActive: cat === params.category
-    }))
-    .sort((a, b) => b.count - a.count);
-
-  // Get some stats for this category
-  const categoryStats = {
-    total: filtered.length,
-    avgDescriptionLength: Math.round(
-      filtered.reduce((acc, b) => acc + b.description.length, 0) / filtered.length
-    ),
-  };
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
+  const filtered = bookmarks.filter((b) => b.category === category);
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -58,7 +21,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
             <span className="text-gray-500">/</span>
             <span className="text-gray-300 font-medium">Categories</span>
             <span className="text-gray-500">/</span>
-            <span className="text-white font-semibold capitalize">{params.category}</span>
+            <span className="text-white font-semibold capitalize">{category}</span>
           </nav>
 
           {/* Header Content */}
@@ -68,7 +31,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
             </div>
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl font-bold text-white capitalize mb-2">
-                {params.category} Collection
+                {category} Collection
               </h1>
               <p className="text-gray-300 text-lg">
                 {filtered.length} carefully curated bookmark{filtered.length !== 1 ? 's' : ''} in this category
@@ -81,12 +44,8 @@ export default function CategoryPage({ params }: { params: { category: string } 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid gap-8 lg:grid-cols-4">
-      
-
           {/* Main Content Area */}
           <div className="lg:col-span-3">
-    
-
             {/* Bookmarks Grid */}
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filtered.map((bookmark, index) => (
@@ -135,7 +94,7 @@ export default function CategoryPage({ params }: { params: { category: string } 
                   <span className="text-3xl">📭</span>
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">No bookmarks found</h3>
-                <p className="text-gray-400 mb-6">This category doesn't have any bookmarks yet.</p>
+                <p className="text-gray-400 mb-6">This category doesn&apos;t have any bookmarks yet.</p>
                 <Link
                   href="/"
                   className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-3 rounded-lg transition-colors duration-200"

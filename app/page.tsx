@@ -2,13 +2,18 @@
 import Link from "next/link";
 // import { bookmarks } from "@/data/bookmarks";
 import { useEffect, useState } from "react";
-import CreateBookmarkModal from "./create/page";
+
+type Bookmark = {
+  title: string;
+  description: string;
+  category: string;
+  slug: string;
+};
 
 export default function Home() {
-  const [bookmarks, setBookmarks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  // const [isOpen, setIsOpen] = useState(false);
+const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     async function fetchBookmarks() {
@@ -19,9 +24,9 @@ export default function Home() {
         if (data.success) {
           setBookmarks(data.data);
           const uniqueCategories = Array.from(
-            new Set(data.data.map((b) => b.category))
+            new Set((data.data as { category: string }[]).map((b) => b.category))
           );
-    
+
           console.log(uniqueCategories);
           setCategories(uniqueCategories);
         }
@@ -35,71 +40,69 @@ export default function Home() {
 
   const bookmarkCount = bookmarks.length;
 
-  const openModal = () => setIsOpen(true);
 
   return (
     <div className="min-h-screen bg-gray-950">
-     {/* Header Section */}
-<div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-  <div className="max-w-6xl mx-auto px-6 py-16">
-    {/* Logo + Title */}
-    <div className="text-center mb-10">
-      <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 rotate-3 shadow-xl">
-        <span className="text-2xl">📚</span>
-      </div>
-      <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-        BookmarkHub
-      </h1>
-      <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-        Your personal digital library with <span className="font-semibold text-white">{bookmarkCount}</span> carefully curated bookmarks.
-      </p>
-    </div>
-
-    {/* Stats */}
-    <div className="text-center mb-12">
-      <h2 className="text-gray-300 text-xl mb-4 font-medium">Quick Stats</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Total Bookmarks */}
-        <div className="bg-gray-800/60 backdrop-blur rounded-xl p-6 border border-gray-700/50 shadow-inner">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center mr-4">
-              <span className="text-blue-400 text-lg">🔖</span>
+      {/* Header Section */}
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="max-w-6xl mx-auto px-6 py-16">
+          {/* Logo + Title */}
+          <div className="text-center mb-10">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 rotate-3 shadow-xl">
+              <span className="text-2xl">📚</span>
             </div>
-            <div>
-              <p className="text-2xl font-bold text-white">{bookmarkCount}</p>
-              <p className="text-gray-400 text-sm">Total Bookmarks</p>
+            <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              BookmarkHub
+            </h1>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Your personal digital library with <span className="font-semibold text-white">{bookmarkCount}</span> carefully curated bookmarks.
+            </p>
+          </div>
+
+          {/* Stats */}
+          <div className="text-center mb-12">
+            <h2 className="text-gray-300 text-xl mb-4 font-medium">Quick Stats</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Total Bookmarks */}
+              <div className="bg-gray-800/60 backdrop-blur rounded-xl p-6 border border-gray-700/50 shadow-inner">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center mr-4">
+                    <span className="text-blue-400 text-lg">🔖</span>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-white">{bookmarkCount}</p>
+                    <p className="text-gray-400 text-sm">Total Bookmarks</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Categories */}
+              <div className="bg-gray-800/60 backdrop-blur rounded-xl p-6 border border-gray-700/50 shadow-inner">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center mr-4">
+                    <span className="text-purple-400 text-lg">📁</span>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-white">{categories.length}</p>
+                    <p className="text-gray-400 text-sm">Categories</p>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
           </div>
-        </div>
 
-        {/* Categories */}
-        <div className="bg-gray-800/60 backdrop-blur rounded-xl p-6 border border-gray-700/50 shadow-inner">
-          <div className="flex items-center">
-            <div className="w-10 h-10 bg-purple-600/20 rounded-lg flex items-center justify-center mr-4">
-              <span className="text-purple-400 text-lg">📁</span>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-white">{categories.length}</p>
-              <p className="text-gray-400 text-sm">Categories</p>
-            </div>
+          {/* Add New Bookmark Button */}
+          <div className="text-center">
+            <button
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-blue-500/30"
+            >
+              <span className="text-xl">➕</span> Add New Bookmark
+            </button>
           </div>
         </div>
-
-  
       </div>
-    </div>
-
-    {/* Add New Bookmark Button */}
-    <div className="text-center">
-      <button
-        onClick={openModal}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-blue-500/30"
-      >
-        <span className="text-xl">➕</span> Add New Bookmark
-      </button>
-    </div>
-  </div>
-</div>
 
 
       {/* Main Content */}
@@ -172,7 +175,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <CreateBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* <CreateBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
     </div>
   );
 }

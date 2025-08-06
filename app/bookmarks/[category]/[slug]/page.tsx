@@ -17,10 +17,9 @@ export default function BookmarkPage() {
   
  const params = useParams();
   const slug = params?.slug as string;
-  const category = params?.category as string;
 
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
-  const [relatedBookmarks, setRelatedBookmarks] = useState<Bookmark[]>([]);
+  // const [relatedBookmarks, setRelatedBookmarks] = useState<Bookmark[]>([]);
 
   useEffect(() => {
     const fetchBookmark = async () => {
@@ -209,7 +208,7 @@ export default function BookmarkPage() {
             </div>
 
             {/* Related Bookmarks */}
-            {relatedBookmarks.length > 0 && (
+            {/* {relatedBookmarks.length > 0 && (
               <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-xl border border-gray-700/50 p-6">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                   <span className="w-6 h-6 bg-orange-600 rounded-lg flex items-center justify-center mr-2 text-xs">🔗</span>
@@ -232,7 +231,7 @@ export default function BookmarkPage() {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
