@@ -30,7 +30,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               <span className="text-2xl">📁</span>
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-white capitalize mb-2">
+              <h1 className="text-xl md:text-2xl font-bold text-white capitalize mb-2">
                 {category} Collection
               </h1>
               <p className="text-gray-300 text-lg">

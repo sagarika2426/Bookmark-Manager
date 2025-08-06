@@ -14,8 +14,8 @@ interface Bookmark {
 export default function BookmarkPage() {
 
 
-  
- const params = useParams();
+
+  const params = useParams();
   const slug = params?.slug as string;
 
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
@@ -57,6 +57,23 @@ export default function BookmarkPage() {
     }
   };
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Check out this bookmark!',
+          text: 'Here’s a bookmark I found useful:',
+          url: window.location.href, // or a specific bookmark link
+        });
+        console.log('Shared successfully!');
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Sharing is not supported on this browser.');
+    }
+  };
+
   if (!bookmark) return <div>Loading...</div>;
   return (
     <div className="min-h-screen bg-gray-950">
@@ -64,14 +81,14 @@ export default function BookmarkPage() {
       <div className="bg-gradient-to-r from-gray-900 to-gray-800 border-b border-gray-700/50">
         <div className="max-w-4xl mx-auto px-6 py-6">
           <nav className="flex items-center space-x-2 text-sm mb-4">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
             >
               Home
             </Link>
             <span className="text-gray-500">/</span>
-            <Link 
+            <Link
               href={`/categories/${bookmark.category}`}
               className="text-gray-400 hover:text-blue-400 transition-colors duration-200"
             >
@@ -80,7 +97,7 @@ export default function BookmarkPage() {
             <span className="text-gray-500">/</span>
             <span className="text-gray-300 font-medium">{bookmark.title}</span>
           </nav>
-          
+
 
         </div>
       </div>
@@ -170,14 +187,17 @@ export default function BookmarkPage() {
                   <span className="text-sm">📝</span>
                   <span className="text-sm font-medium">Edit Bookmark</span>
                 </button>
-                <button className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200">
+                <button
+                  className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200"
+                  onClick={handleShare}
+                >
                   <span className="text-sm">📤</span>
                   <span className="text-sm font-medium">Share</span>
                 </button>
-<button
-  onClick={() => handleDelete()}
-  className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-red-700/50 hover:bg-red-700 text-red-300 hover:text-white transition-all duration-200"
->                  <span className="text-sm">🗑️</span>
+                <button
+                  onClick={() => handleDelete()}
+                  className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-red-700/50 hover:bg-red-700 text-red-300 hover:text-white transition-all duration-200"
+                >                  <span className="text-sm">🗑️</span>
                   <span className="text-sm font-medium">Delete</span>
                 </button>
               </div>
@@ -197,7 +217,7 @@ export default function BookmarkPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-white font-medium">#{bookmark.category}</p>
-              
+
                     </div>
                     <svg className="w-4 h-4 text-gray-400 group-hover:text-white group-hover:translate-x-0.5 transition-all duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
