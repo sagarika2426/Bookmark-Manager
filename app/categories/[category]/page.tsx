@@ -47,7 +47,6 @@ export default function CategoryPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid gap-8 lg:grid-cols-4">
-          {/* Main Content Area */}
           <div className="lg:col-span-3">
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filtered.map((bookmark, index) => (
