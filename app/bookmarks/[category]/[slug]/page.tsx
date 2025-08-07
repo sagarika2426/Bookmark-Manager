@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import EditBookmarkForm from "@/components/EditBookmarkModal";
 interface Bookmark {
   slug: string;
   category: string;
@@ -20,6 +21,9 @@ export default function BookmarkPage() {
 
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
   // const [relatedBookmarks, setRelatedBookmarks] = useState<Bookmark[]>([]);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+const [selectedBookmark, setSelectedBookmark] = useState<Bookmark | null>(null);
+
 
   useEffect(() => {
     const fetchBookmark = async () => {
@@ -73,6 +77,23 @@ export default function BookmarkPage() {
       alert('Sharing is not supported on this browser.');
     }
   };
+
+
+
+const handleEditClick = (bookmark: Bookmark) => {
+  setSelectedBookmark(bookmark);
+  setIsEditOpen(true);
+};
+
+const handleCopyLink = async (url: string) => {
+  try {
+    await navigator.clipboard.writeText(url);
+    alert("Link copied to clipboard!");
+  } catch (err) {
+    console.error("Failed to copy!", err);
+    alert("Failed to copy link.");
+  }
+};
 
   if (!bookmark) return <div>Loading...</div>;
   return (
@@ -161,7 +182,7 @@ export default function BookmarkPage() {
                   </svg>
                 </a>
 
-                <button className="inline-flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium px-6 py-3 rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500">
+                <button onClick={() => handleCopyLink(bookmark.url)} className="inline-flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium px-6 py-3 rounded-xl transition-all duration-200 border border-gray-600 hover:border-gray-500">
                   <span>📋</span>
                   Copy Link
                 </button>
@@ -183,7 +204,7 @@ export default function BookmarkPage() {
                 Quick Actions
               </h3>
               <div className="space-y-3">
-                <button className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200">
+                <button onClick={() => handleEditClick(bookmark)} className="w-full flex items-center gap-3 text-left p-3 rounded-lg bg-gray-700/50 hover:bg-gray-700 text-gray-300 hover:text-white transition-all duration-200">
                   <span className="text-sm">📝</span>
                   <span className="text-sm font-medium">Edit Bookmark</span>
                 </button>
@@ -255,6 +276,19 @@ export default function BookmarkPage() {
           </div>
         </div>
       </div>
+
+      {selectedBookmark && (
+  <EditBookmarkForm
+    isOpen={isEditOpen}
+    onClose={() => setIsEditOpen(false)}
+    bookmark={selectedBookmark}
+    onUpdate={(updatedBookmark) => {
+      // Optional: update the local state if you’re storing the bookmarks
+      console.log("Updated Bookmark:", updatedBookmark);
+      setIsEditOpen(false);
+    }}
+  />
+)}
     </div>
   );
 }

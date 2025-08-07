@@ -38,8 +38,6 @@ export async function DELETE(req, { params }) {
 }
 
 
-
-
 export async function GET(req, { params }) {
   try {
     await connectToDB();
@@ -71,3 +69,40 @@ export async function GET(req, { params }) {
     );
   }
 }
+
+
+
+export async function PUT(req, { params }) {
+  try {
+    await connectToDB(); 
+
+    const { slug } = params; 
+
+    const body = await req.json(); 
+
+    const updatedBookmark = await Bookmarks.findOneAndUpdate(  
+      { slug },
+      { $set: body },
+      { new: true }
+    );
+
+    if (!updatedBookmark) { 
+      return NextResponse.json(
+        { success: false, error: "Bookmark not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(  
+      { success: true, message: "Bookmark updated", data: updatedBookmark },
+      { status: 200 }
+    );
+  } catch (error) {  
+    console.error("PUT Error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update bookmark" },
+      { status: 500 }
+    );
+  }
+}
+

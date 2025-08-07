@@ -1,8 +1,14 @@
-import { bookmarks } from "@/data/bookmarks";
+"use client";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-  const { category } = await params;
+export default function CategoryPage() {
+  const { category } = useParams();
+  const { bookmarks, categories, loading } = useBookmarks();
+
+  if (loading) return <p>Loading...</p>;
+
   const filtered = bookmarks.filter((b) => b.category === category);
 
   return (

@@ -1,4 +1,5 @@
 "use client";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import Link from "next/link";
 // import { bookmarks } from "@/data/bookmarks";
 import { useEffect, useState } from "react";
@@ -11,32 +12,7 @@ type Bookmark = {
 };
 
 export default function Home() {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  // const [isOpen, setIsOpen] = useState(false);
-const [categories, setCategories] = useState<string[]>([]);
-
-  useEffect(() => {
-    async function fetchBookmarks() {
-      try {
-        const res = await fetch("/api/allbookmarks");
-        const data = await res.json();
-        console.log(data);
-        if (data.success) {
-          setBookmarks(data.data);
-          const uniqueCategories = Array.from(
-            new Set((data.data as { category: string }[]).map((b) => b.category))
-          );
-
-          console.log(uniqueCategories);
-          setCategories(uniqueCategories);
-        }
-      } catch (err) {
-        console.error("Failed to fetch bookmarks", err);
-      }
-    }
-
-    fetchBookmarks();
-  }, []);
+ const { bookmarks, categories, loading } = useBookmarks();
 
   const bookmarkCount = bookmarks.length;
 
