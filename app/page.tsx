@@ -1,7 +1,6 @@
 "use client";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import Link from "next/link";
-// import { bookmarks } from "@/data/bookmarks";
 import { useEffect, useState } from "react";
 
 type Bookmark = {
@@ -22,7 +21,6 @@ export default function Home() {
       {/* Header Section */}
    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
   <div className="max-w-4xl mx-auto px-6 py-10">
-    {/* Header: Logo + Title */}
     <div className="text-center mb-8">
       <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-2xl mb-6 rotate-3 shadow-xl">
         <span className="text-3xl">📚</span>
@@ -39,7 +37,6 @@ export default function Home() {
     <div className="text-center mb-6">
       <h2 className="text-gray-400 text-md uppercase tracking-wider mb-6">Quick Stats</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-xl mx-auto">
-        {/* Total Bookmarks */}
         <div className="bg-gray-800/70 backdrop-blur-md rounded-2xl p-6 border border-gray-700/50 shadow-lg hover:shadow-blue-500/10 transition-shadow duration-300">
           <div className="flex items-center space-x-4">
             <div className="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center">
@@ -67,7 +64,6 @@ export default function Home() {
       </div>
     </div>
 
-    {/* Add New Bookmark Button */}
     <div className="text-center">
       <Link
         href="/create"
@@ -82,7 +78,6 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Categories Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
             <span className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3 text-sm">📂</span>
@@ -150,7 +145,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <CreateBookmarkModal isOpen={isOpen} setIsOpen={setIsOpen} /> */}
     </div>
   );
 }

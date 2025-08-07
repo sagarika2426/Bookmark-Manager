@@ -13,10 +13,8 @@ export default function CategoryPage() {
 
   return (
     <div className="min-h-screen bg-gray-950">
-      {/* Header Section */}
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700/50">
         <div className="max-w-7xl mx-auto px-6 py-8">
-          {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm mb-6">
             <Link 
               href="/" 
@@ -30,7 +28,6 @@ export default function CategoryPage() {
             <span className="text-white font-semibold capitalize">{category}</span>
           </nav>
 
-          {/* Header Content */}
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center rotate-3 shadow-lg">
               <span className="text-2xl">📁</span>
@@ -52,7 +49,6 @@ export default function CategoryPage() {
         <div className="grid gap-8 lg:grid-cols-4">
           {/* Main Content Area */}
           <div className="lg:col-span-3">
-            {/* Bookmarks Grid */}
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filtered.map((bookmark, index) => (
                 <Link
@@ -63,7 +59,6 @@ export default function CategoryPage() {
                     animationDelay: `${index * 50}ms`
                   }}
                 >
-                  {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 via-purple-600/0 to-blue-600/0 group-hover:from-blue-600/5 group-hover:via-purple-600/5 group-hover:to-blue-600/5 transition-all duration-500"></div>
                   
                   <div className="relative z-10">
