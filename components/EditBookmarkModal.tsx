@@ -30,7 +30,11 @@ export default function EditBookmarkForm({
     setFormData(bookmark);
   }, [bookmark]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -55,8 +59,12 @@ export default function EditBookmarkForm({
       if (res.ok) alert("Bookmark updated!");
 
       onUpdate(data.data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -138,7 +146,9 @@ export default function EditBookmarkForm({
 
           {formData.category === "other" && (
             <div>
-              <label className="block text-sm font-medium mb-1">Custom Category *</label>
+              <label className="block text-sm font-medium mb-1">
+                Custom Category *
+              </label>
               <input
                 name="customCategory"
                 value={formData.customCategory || ""}
@@ -150,7 +160,9 @@ export default function EditBookmarkForm({
           )}
 
           <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label className="block text-sm font-medium mb-1">
+              Description
+            </label>
             <textarea
               name="description"
               value={formData.description || ""}

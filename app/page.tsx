@@ -1,17 +1,10 @@
 "use client";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-type Bookmark = {
-  title: string;
-  description: string;
-  category: string;
-  slug: string;
-};
 
 export default function Home() {
- const { bookmarks, categories, loading } = useBookmarks();
+ const { bookmarks, categories } = useBookmarks();
 
   const bookmarkCount = bookmarks.length;
 

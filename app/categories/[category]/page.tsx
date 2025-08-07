@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 export default function CategoryPage() {
   const { category } = useParams();
-  const { bookmarks, categories, loading } = useBookmarks();
+  const { bookmarks, loading } = useBookmarks();
 
   if (loading) return <p>Loading...</p>;
 
