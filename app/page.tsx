@@ -1,10 +1,12 @@
 "use client";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 
 export default function Home() {
  const { bookmarks, categories } = useBookmarks();
+   const { isSignedIn, user, isLoaded } = useUser();
 
   const bookmarkCount = bookmarks.length;
 
@@ -22,7 +24,7 @@ export default function Home() {
         BookmarkHub
       </h1>
       <p className="text-md md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-        Your personal digital library with <span className="font-semibold text-white">{bookmarkCount}</span> carefully curated bookmarks.
+        Your personal digital library
       </p>
     </div>
 
