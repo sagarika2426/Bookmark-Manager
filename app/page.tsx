@@ -1,12 +1,10 @@
 "use client";
 import { useBookmarks } from "@/hooks/useBookmarks";
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 
 export default function Home() {
  const { bookmarks, categories } = useBookmarks();
-   const { isSignedIn, user, isLoaded } = useUser();
 
   const bookmarkCount = bookmarks.length;
 
